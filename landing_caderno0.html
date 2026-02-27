@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caderno 0 — Aprenda lógica de programação sem computador</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&family=DM+Mono:wght@400;500&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink:     #0E0B06;
+  --paper:   #FFFDF5;
+  --red:     #C0160C;
+  --red-d:   #8B0F08;
+  --amber:   #D97706;
+  --amber-l: #FEF3C7;
+  --green:   #15803D;
+  --green-l: #DCFCE7;
+  --line:    #E5DDD0;
+  --ghost:   #A89878;
+  --gray:    #F5F1EA;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--ink);
+  overflow-x: hidden;
+}
+
+/* ══ HERO ══════════════════════════════════════════════ */
+.hero {
+  background: var(--ink);
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px 56px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* grade de fundo tipo papel quadriculado escuro */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(192,22,12,.15);
+  border: 1px solid rgba(192,22,12,.4);
+  color: #FF6B63;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 2px;
+  margin-bottom: 28px;
+  animation: fadeDown .6s ease both;
+}
+
+.hero-badge::before {
+  content: '';
+  width: 6px; height: 6px;
+  background: #FF6B63;
+  border-radius: 50%;
+  animation: pulse 1.4s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .5; transform: scale(.7); }
+}
+
+.hero-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--ghost);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  text-align: center;
+  animation: fadeDown .6s .1s ease both;
+}
+
+.hero-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(52px, 12vw, 96px);
+  line-height: .95;
+  color: var(--paper);
+  text-align: center;
+  margin-bottom: 8px;
+  animation: fadeDown .6s .15s ease both;
+  letter-spacing: .02em;
+}
+
+.hero-title span {
+  color: var(--red);
+  display: block;
+}
+
+.hero-sub {
+  font-size: clamp(16px, 3vw, 20px);
+  color: #C8BFB0;
+  text-align: center;
+  max-width: 520px;
+  margin: 16px auto 40px;
+  line-height: 1.5;
+  animation: fadeDown .6s .2s ease both;
+}
+
+.hero-sub strong { color: var(--paper); font-weight: 500; }
+
+.hero-cta {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  animation: fadeDown .6s .3s ease both;
+}
+
+.btn-main {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--red);
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  padding: 18px 40px;
+  border-radius: 4px;
+  text-decoration: none;
+  letter-spacing: .02em;
+  transition: background .2s, transform .15s;
+  box-shadow: 0 4px 24px rgba(192,22,12,.4);
+}
+
+.btn-main:hover {
+  background: var(--red-d);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(192,22,12,.5);
+}
+
+.btn-main .arrow { font-size: 20px; }
+
+.hero-guarantee {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--ghost);
+  letter-spacing: .06em;
+  text-align: center;
+}
+
+.hero-scroll {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--ghost);
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  animation: fadeDown .6s .5s ease both;
+}
+
+.scroll-line {
+  width: 1px;
+  height: 32px;
+  background: linear-gradient(to bottom, transparent, var(--ghost));
+  animation: scrollAnim 1.6s infinite;
+}
+
+@keyframes scrollAnim {
+  0% { opacity: 0; transform: scaleY(0); transform-origin: top; }
+  50% { opacity: 1; transform: scaleY(1); }
+  100% { opacity: 0; transform: scaleY(0); transform-origin: bottom; }
+}
+
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ══ SEÇÃO PROBLEMA ══════════════════════════════════ */
+.section {
+  background: var(--paper);
+  padding: 72px 24px;
+}
+
+.section.dark {
+  background: #161008;
+  color: var(--paper);
+}
+
+.section.gray {
+  background: var(--gray);
+}
+
+.container {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(36px, 7vw, 56px);
+  line-height: 1;
+  margin-bottom: 24px;
+  letter-spacing: .02em;
+}
+
+.dark .section-title { color: var(--paper); }
+
+p.body {
+  font-size: 17px;
+  line-height: 1.7;
+  color: #4A3E2A;
+  margin-bottom: 16px;
+}
+
+.dark p.body { color: #C0B09A; }
+
+/* ══ BULLETS ══════════════════════════════════════════ */
+.pain-list {
+  list-style: none;
+  margin: 28px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.pain-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line);
+  font-size: 15.5px;
+  color: #4A3E2A;
+  line-height: 1.5;
+}
+
+.pain-item:last-child { border-bottom: none; }
+
+.pain-item.strike {
+  text-decoration: line-through;
+  color: var(--ghost);
+  background: #FAFAF7;
+}
+
+.pain-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ══ PRODUTO — preview do caderno ════════════════════ */
+.caderno-preview {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 32px 0;
+  box-shadow: 0 8px 40px rgba(0,0,0,.12);
+}
+
+.caderno-header {
+  background: var(--ink);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.caderno-title-sm {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: #C0B09A;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.caderno-badge-sm {
+  background: var(--red);
+  color: #fff;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  padding: 3px 10px;
+  border-radius: 2px;
+  letter-spacing: .08em;
+}
+
+/* linhas de caderno dentro do preview */
+.caderno-body {
+  padding: 24px 24px 20px 52px;
+  background-image:
+    linear-gradient(to right, transparent 27px, #E8B0A0 27px, #E8B0A0 29px, transparent 29px),
+    repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent 31px,
+      #DAD0C0 31px,
+      #DAD0C0 32px
+    );
+  min-height: 160px;
+}
+
+.caderno-linha {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  color: #5A4A30;
+  line-height: 32px;
+  letter-spacing: .02em;
+}
+
+.caderno-linha.preenchido { color: #1A1208; font-weight: 500; }
+.caderno-linha.placeholder { color: #C0B09A; font-style: italic; }
+
+/* ══ O QUE TEM DENTRO ════════════════════════════════ */
+.licoes-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 28px 0;
+}
+
+.licao-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.licao-item:last-child { border-bottom: none; }
+
+.licao-num {
+  width: 52px;
+  flex-shrink: 0;
+  background: var(--ink);
+  color: var(--amber);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  text-align: center;
+  padding: 18px 0;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: .04em;
+}
+
+.licao-content {
+  padding: 16px 18px;
+  flex: 1;
+}
+
+.licao-nome {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--ink);
+  margin-bottom: 3px;
+}
+
+.licao-desc {
+  font-size: 13.5px;
+  color: var(--ghost);
+  line-height: 1.4;
+}
+
+/* ══ PARA QUEM É ══════════════════════════════════════ */
+.target-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 28px 0;
+}
+
+@media (max-width: 520px) { .target-grid { grid-template-columns: 1fr; } }
+
+.target-card {
+  border-radius: 6px;
+  padding: 20px;
+  border: 1px solid;
+}
+
+.target-card.sim {
+  background: var(--green-l);
+  border-color: #86EFAC;
+}
+
+.target-card.nao {
+  background: #FEF2F2;
+  border-color: #FECACA;
+}
+
+.target-card-header {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.target-card.sim .target-card-header { color: var(--green); }
+.target-card.nao .target-card-header { color: var(--red); }
+
+.target-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: #3A3020;
+  line-height: 1.45;
+  margin-bottom: 8px;
+}
+
+.target-item:last-child { margin-bottom: 0; }
+.target-item .ic { flex-shrink: 0; font-size: 14px; margin-top: 1px; }
+
+/* ══ PROVA SOCIAL ════════════════════════════════════ */
+.depo-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 28px 0;
+}
+
+.depo-card {
+  background: #1E1610;
+  border: 1px solid #3A2E1A;
+  border-radius: 6px;
+  padding: 20px 22px;
+}
+
+.depo-text {
+  font-size: 15px;
+  color: #D0C0A8;
+  line-height: 1.6;
+  margin-bottom: 14px;
+  font-style: italic;
+}
+
+.depo-text::before { content: '"'; color: var(--amber); font-size: 20px; }
+.depo-text::after  { content: '"'; color: var(--amber); font-size: 20px; }
+
+.depo-author {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.depo-avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--ink);
+  border: 2px solid #3A2E1A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 14px;
+  color: var(--amber);
+}
+
+.depo-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--paper);
+}
+
+.depo-handle {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--ghost);
+}
+
+/* ══ PREÇO ═══════════════════════════════════════════ */
+.price-box {
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 32px 0;
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.price-header {
+  background: var(--ink);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.price-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  color: var(--paper);
+  letter-spacing: .04em;
+}
+
+.price-badge {
+  background: var(--red);
+  color: #fff;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  padding: 4px 12px;
+  border-radius: 2px;
+  letter-spacing: .08em;
+}
+
+.price-body {
+  padding: 28px 24px;
+}
+
+.price-number {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.price-currency {
+  font-family: 'DM Mono', monospace;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--ghost);
+  margin-top: 8px;
+}
+
+.price-value {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 72px;
+  line-height: 1;
+  color: var(--ink);
+  letter-spacing: .02em;
+}
+
+.price-cents {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  color: var(--ink);
+  margin-top: 10px;
+}
+
+.price-note {
+  font-size: 13px;
+  color: var(--ghost);
+  margin-bottom: 24px;
+}
+
+.price-includes {
+  list-style: none;
+  margin-bottom: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.price-includes li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14.5px;
+  color: #3A3020;
+}
+
+.price-includes li::before {
+  content: '✓';
+  color: var(--green);
+  font-weight: 700;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.btn-comprar {
+  display: block;
+  width: 100%;
+  background: var(--red);
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  padding: 18px;
+  border-radius: 4px;
+  text-decoration: none;
+  text-align: center;
+  letter-spacing: .02em;
+  transition: background .2s, transform .15s;
+  box-shadow: 0 4px 20px rgba(192,22,12,.3);
+}
+
+.btn-comprar:hover {
+  background: var(--red-d);
+  transform: translateY(-2px);
+}
+
+.price-security {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+
+.security-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10.5px;
+  color: var(--ghost);
+  letter-spacing: .04em;
+}
+
+/* ══ FAQ ══════════════════════════════════════════════ */
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 28px 0;
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--line);
+}
+
+.faq-item:last-child { border-bottom: none; }
+
+.faq-q {
+  padding: 18px 20px;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--ink);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  user-select: none;
+}
+
+.faq-q:hover { background: var(--gray); }
+.faq-icon { font-size: 18px; flex-shrink: 0; transition: transform .2s; color: var(--ghost); }
+.faq-item.open .faq-icon { transform: rotate(45deg); }
+
+.faq-a {
+  display: none;
+  padding: 0 20px 18px;
+  font-size: 14.5px;
+  color: #4A3E2A;
+  line-height: 1.7;
+  border-top: 1px solid var(--line);
+}
+
+.faq-item.open .faq-a { display: block; }
+
+/* ══ FOOTER FINAL CTA ═════════════════════════════════ */
+.final-cta {
+  background: var(--ink);
+  padding: 80px 24px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.final-cta::before {
+  content: '0';
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 400px;
+  color: rgba(255,255,255,.02);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+.final-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(40px, 8vw, 68px);
+  color: var(--paper);
+  line-height: 1;
+  margin-bottom: 16px;
+  letter-spacing: .02em;
+  position: relative;
+}
+
+.final-title span { color: var(--red); }
+
+.final-sub {
+  font-size: 17px;
+  color: #9A8A70;
+  margin-bottom: 36px;
+  max-width: 440px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+}
+
+.final-price {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  color: var(--ghost);
+  margin-top: 14px;
+  position: relative;
+}
+
+/* ══ FOOTER ══════════════════════════════════════════ */
+footer {
+  background: #080500;
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.footer-text {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: #4A3E2A;
+  letter-spacing: .06em;
+  line-height: 1.8;
+}
+
+/* ══ STICKY CTA mobile ═══════════════════════════════ */
+.sticky-bar {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--ink);
+  border-top: 1px solid #3A2E1A;
+  padding: 12px 20px;
+  z-index: 999;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+@media (max-width: 640px) { .sticky-bar { display: flex; } }
+
+.sticky-price {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 24px;
+  color: var(--paper);
+  line-height: 1;
+}
+
+.sticky-price small {
+  display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: var(--ghost);
+  font-weight: 400;
+  letter-spacing: .06em;
+}
+
+.btn-sticky {
+  background: var(--red);
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 12px 24px;
+  border-radius: 4px;
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ══ DIVIDER ══════════════════════════════════════════ */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 40px 0;
+}
+
+.divider-line { flex: 1; height: 1px; background: var(--line); }
+.divider-text { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--ghost); letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; }
+
+/* ══ HIGHLIGHT QUOTE ══════════════════════════════════ */
+.quote-block {
+  border-left: 3px solid var(--red);
+  padding: 16px 20px;
+  margin: 28px 0;
+  background: var(--gray);
+  border-radius: 0 6px 6px 0;
+}
+
+.quote-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 17px;
+  font-style: italic;
+  color: var(--ink);
+  line-height: 1.6;
+}
+</style>
+</head>
+<body>
+
+<!-- ══ HERO ══════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-badge">Caderno de Campo — Série C# × RE4</div>
+  <p class="hero-eyebrow">Aprenda lógica de programação</p>
+  <h1 class="hero-title">
+    Sem computador,
+    <span>sem desculpa.</span>
+  </h1>
+  <p class="hero-sub">
+    O <strong>Caderno 0</strong> ensina lógica e algoritmos só com papel e caneta —
+    para você começar a pensar como programador hoje, agora, sem precisar de nada além disso.
+  </p>
+  <div class="hero-cta">
+    <a href="#preco" class="btn-main">
+      Quero o Caderno 0
+      <span class="arrow">↓</span>
+    </a>
+    <p class="hero-guarantee">🔒 Acesso imediato após o pagamento · R$17</p>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    scroll
+  </div>
+</section>
+
+<!-- ══ PROBLEMA ═══════════════════════════════════════════ -->
+<section class="section">
+  <div class="container">
+    <p class="section-label">O problema</p>
+    <h2 class="section-title">Você trava antes de começar</h2>
+
+    <p class="body">A maioria das pessoas que quer aprender programação abandona nas primeiras semanas. Não é por falta de inteligência. É porque pulam uma etapa fundamental.</p>
+
+    <ul class="pain-list">
+      <li class="pain-item">
+        <span class="pain-icon">😵</span>
+        Abre o primeiro tutorial, vê código na tela e a cabeça trava completamente
+      </li>
+      <li class="pain-item">
+        <span class="pain-icon">💻</span>
+        Não tem computador disponível — ou quando tem, não sabe por onde começar
+      </li>
+      <li class="pain-item">
+        <span class="pain-icon">🔄</span>
+        Tenta um curso, desiste, tenta outro, desiste de novo — o ciclo nunca para
+      </li>
+      <li class="pain-item">
+        <span class="pain-icon">🤯</span>
+        Decorou a sintaxe mas não entende o que está fazendo nem por quê
+      </li>
+    </ul>
+
+    <div class="quote-block">
+      <p class="quote-text">O código não é o problema. O problema é não saber pensar logicamente antes de escrever qualquer linha.</p>
+    </div>
+
+    <p class="body">É exatamente essa lacuna que o Caderno 0 preenche.</p>
+  </div>
+</section>
+
+<!-- ══ SOLUÇÃO ════════════════════════════════════════════ -->
+<section class="section gray">
+  <div class="container">
+    <p class="section-label">A solução</p>
+    <h2 class="section-title">Lógica primeiro. Código depois.</h2>
+
+    <p class="body">O <strong>Caderno 0</strong> é um caderno imprimível de exercícios que você resolve com caneta. Nada de instalar, configurar, ou entrar em modo de pausa aguardando o computador carregar.</p>
+
+    <p class="body">Você aprende a pensar como programador — usando a lógica que você já tem — antes de ver uma linha de código. Quando chegar no código, ele vai fazer sentido.</p>
+
+    <!-- Preview do caderno -->
+    <div class="caderno-preview">
+      <div class="caderno-header">
+        <span class="caderno-title-sm">C# do Zero × RE4 — Caderno de Campo</span>
+        <span class="caderno-badge-sm">Caderno 0</span>
+      </div>
+      <div class="caderno-body">
+        <div class="caderno-linha preenchido">Lição 1 — O que é Lógica?</div>
+        <div class="caderno-linha placeholder">Ex: Leon tem 5 granadas. Há 8 inimigos. Conclusão:</div>
+        <div class="caderno-linha preenchido">→ Granadas insuficientes. Precisa de outra estratégia.</div>
+        <div class="caderno-linha">&nbsp;</div>
+        <div class="caderno-linha placeholder">Lição 3 — Escreva seu algoritmo: 1. ____________</div>
+        <div class="caderno-linha placeholder">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. ____________</div>
+      </div>
+    </div>
+
+    <p class="body" style="font-size:14px;color:var(--ghost);text-align:center;">↑ Assim é o caderno — linhas para você escrever, exercícios reais, sem frescura.</p>
+  </div>
+</section>
+
+<!-- ══ CONTEÚDO ════════════════════════════════════════════ -->
+<section class="section">
+  <div class="container">
+    <p class="section-label">O que tem dentro</p>
+    <h2 class="section-title">5 lições. 1 caderno. Fundação completa.</h2>
+
+    <div class="licoes-grid">
+      <div class="licao-item">
+        <div class="licao-num">L1</div>
+        <div class="licao-content">
+          <div class="licao-nome">O que é lógica</div>
+          <div class="licao-desc">Entende que lógica não é de programador — é humana. E você já usa todo dia.</div>
+        </div>
+      </div>
+      <div class="licao-item">
+        <div class="licao-num">L2</div>
+        <div class="licao-content">
+          <div class="licao-nome">Padrões e sequências</div>
+          <div class="licao-desc">Treina o cérebro para reconhecer padrões e entender que a ordem sempre importa.</div>
+        </div>
+      </div>
+      <div class="licao-item">
+        <div class="licao-num">L3</div>
+        <div class="licao-content">
+          <div class="licao-nome">O que é um algoritmo</div>
+          <div class="licao-desc">Aprende a definição real e escreve o seu primeiro algoritmo — de uma situação do dia a dia.</div>
+        </div>
+      </div>
+      <div class="licao-item">
+        <div class="licao-num">L4</div>
+        <div class="licao-content">
+          <div class="licao-nome">Refinando algoritmos</div>
+          <div class="licao-desc">Aprende a corrigir os 3 erros clássicos: buracos, ambiguidade e redundância.</div>
+        </div>
+      </div>
+      <div class="licao-item">
+        <div class="licao-num">L5</div>
+        <div class="licao-content">
+          <div class="licao-nome">Seu primeiro algoritmo real</div>
+          <div class="licao-desc">Cria um algoritmo completo do zero usando o processo de 5 passos que programadores usam de verdade.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quote-block">
+      <p class="quote-text">Cada lição tem exercícios que você resolve escrevendo — não lendo passivamente. Aprendizado ativo, no papel, no seu ritmo.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PARA QUEM É ═════════════════════════════════════════ -->
+<section class="section gray">
+  <div class="container">
+    <p class="section-label">Para quem é</p>
+    <h2 class="section-title">Seja honesto com você mesmo</h2>
+
+    <div class="target-grid">
+      <div class="target-card sim">
+        <div class="target-card-header">✓ É para você se...</div>
+        <div class="target-item"><span class="ic">→</span> Quer aprender programação mas não sabe por onde começar</div>
+        <div class="target-item"><span class="ic">→</span> Não tem computador disponível agora ou prefere papel</div>
+        <div class="target-item"><span class="ic">→</span> Já tentou tutoriais e travou logo no começo</div>
+        <div class="target-item"><span class="ic">→</span> Quer uma base sólida antes de escrever código</div>
+      </div>
+      <div class="target-card nao">
+        <div class="target-card-header">✗ Não é para você se...</div>
+        <div class="target-item"><span class="ic">→</span> Já programa e quer aprender sintaxe avançada</div>
+        <div class="target-item"><span class="ic">→</span> Quer um curso com vídeo e suporte ao vivo</div>
+        <div class="target-item"><span class="ic">→</span> Prefere aprender direto no computador sem papel</div>
+      </div>
+    </div>
+
+    <p class="body" style="font-size:14px;">Esse filtro existe por um motivo: quem compra sabendo exatamente o que é aproveita muito mais — e não precisa de reembolso.</p>
+  </div>
+</section>
+
+<!-- ══ DEPOIMENTOS ════════════════════════════════════════ -->
+<section class="section dark">
+  <div class="container">
+    <p class="section-label">Quem já usou</p>
+    <h2 class="section-title" style="color:var(--paper);">Resultados reais</h2>
+
+    <div class="depo-grid">
+      <div class="depo-card">
+        <p class="depo-text">Tentei aprender programação 3 vezes antes disso. Sempre travava no segundo dia. Com o caderno fui direto — fiz as 5 lições num fim de semana, sem computador, e pela primeira vez entendi o que é um algoritmo de verdade.</p>
+        <div class="depo-author">
+          <div class="depo-avatar">M</div>
+          <div>
+            <div class="depo-name">Mateus R.</div>
+            <div class="depo-handle">estudante de TI — São Paulo</div>
+          </div>
+        </div>
+      </div>
+      <div class="depo-card">
+        <p class="depo-text">Comprei achando que era simples demais. Fiz os exercícios e percebi que nunca tinha parado pra pensar dessa forma. Quando fui pro Caderno 1, o código fez sentido de um jeito que nunca fez antes.</p>
+        <div class="depo-author">
+          <div class="depo-avatar">J</div>
+          <div>
+            <div class="depo-name">Juliana C.</div>
+            <div class="depo-handle">iniciante em C# — Recife</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PREÇO ═══════════════════════════════════════════════ -->
+<section class="section" id="preco">
+  <div class="container">
+    <p class="section-label">Investimento</p>
+    <h2 class="section-title">Menos que um lanche.</h2>
+
+    <div class="price-box">
+      <div class="price-header">
+        <span class="price-title">Caderno 0 — Lógica e Algoritmos</span>
+        <span class="price-badge">Acesso imediato</span>
+      </div>
+      <div class="price-body">
+        <div class="price-number">
+          <span class="price-currency">R$</span>
+          <span class="price-value">17</span>
+          <span class="price-cents">,00</span>
+        </div>
+        <p class="price-note">pagamento único · acesso permanente · sem mensalidade</p>
+
+        <ul class="price-includes">
+          <li>Caderno 0 completo em PDF (imprimível em qualquer impressora)</li>
+          <li>5 lições com exercícios escritos</li>
+          <li>Gabaritos detalhados para cada exercício</li>
+          <li>Formato A4 otimizado para impressão em casa</li>
+          <li>Acesso a todas as atualizações futuras</li>
+        </ul>
+
+        <a href="#" class="btn-comprar">Quero o Caderno 0 por R$17 →</a>
+
+        <div class="price-security">
+          <span class="security-item">🔒 Pagamento seguro Hotmart</span>
+          <span class="security-item">📥 Download imediato</span>
+          <span class="security-item">7 dias de garantia</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider">
+      <div class="divider-line"></div>
+      <div class="divider-text">depois do caderno 0</div>
+      <div class="divider-line"></div>
+    </div>
+
+    <ul class="pain-list">
+      <li class="pain-item strike">
+        <span class="pain-icon">✗</span>
+        "Não sei por onde começar"
+      </li>
+      <li class="pain-item strike">
+        <span class="pain-icon">✗</span>
+        "Vejo o código e minha cabeça trava"
+      </li>
+      <li class="pain-item strike">
+        <span class="pain-icon">✗</span>
+        "Preciso de um computador pra aprender"
+      </li>
+      <li class="pain-item" style="background:var(--green-l);">
+        <span class="pain-icon">✓</span>
+        Você pensa logicamente, cria algoritmos e está pronto para o Caderno 1 — onde aparece o código C# pela primeira vez.
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══ FAQ ════════════════════════════════════════════════ -->
+<section class="section gray">
+  <div class="container">
+    <p class="section-label">Dúvidas</p>
+    <h2 class="section-title">Perguntas frequentes</h2>
+
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Preciso imprimir? Posso usar no tablet?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a">
+          Funciona nos dois. Para quem tem tablet com caneta é ótimo — você preenche digitalmente. Para quem prefere papel, é só imprimir em A4 preto e branco numa gráfica ou em casa. O caderno foi desenhado para funcionar bem nos dois formatos.
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Nunca vi nada de programação. Funciona para mim?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a">
+          Sim — esse é exatamente o público do Caderno 0. Não tem código, não tem instalação, não tem pré-requisito. A única coisa que você precisa saber é ler e pensar. O caderno parte do zero absoluto.
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Quanto tempo leva para completar?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a">
+          Em média 3 a 5 horas no total, divididas em 5 lições. Dá pra fazer uma lição por dia em 30-40 minutos, ou concluir tudo num fim de semana. O ritmo é seu.
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          O que vem depois do Caderno 0?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a">
+          O Caderno 1 — onde aparece código C# pela primeira vez, mas ainda no papel. A série tem 6 cadernos no total, indo de lógica pura até os fundamentos de orientação a objetos. Cada um pode ser comprado separadamente.
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          E se eu não gostar?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a">
+          7 dias de garantia pelo Hotmart. Se por qualquer motivo não gostar, solicita o reembolso diretamente na plataforma e o valor é devolvido. Sem burocracia.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FINAL CTA ═══════════════════════════════════════════ -->
+<section class="final-cta" id="comprar">
+  <h2 class="final-title">
+    Começa hoje.<br>
+    <span>No papel.</span>
+  </h2>
+  <p class="final-sub">
+    A primeira lição leva 30 minutos. Quando terminar, você vai pensar diferente sobre programação.
+  </p>
+  <a href="#preco" class="btn-main" style="font-size:20px;padding:20px 48px;position:relative;">
+    Quero o Caderno 0 →
+  </a>
+  <p class="final-price">R$17 · pagamento único · acesso imediato</p>
+</section>
+
+<footer>
+  <p class="footer-text">
+    C# do Zero × Resident Evil 4 — Cadernos de Campo<br>
+    Produto digital · Entregue via Hotmart · Suporte pelo Instagram
+  </p>
+</footer>
+
+<!-- ══ STICKY BAR (mobile) ════════════════════════════════ -->
+<div class="sticky-bar">
+  <div class="sticky-price">
+    R$17
+    <small>Caderno 0 — acesso imediato</small>
+  </div>
+  <a href="#preco" class="btn-sticky">Comprar →</a>
+</div>
+
+<script>
+function toggleFaq(el) {
+  const item = el.parentElement;
+  item.classList.toggle('open');
+}
+</script>
+
+</body>
+</html>
