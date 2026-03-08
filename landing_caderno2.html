@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caderno 2 — Decisões e Caminhos | C# do Zero × RE4</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&family=DM+Mono:wght@400;500&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink:     #0E0B06;
+  --paper:   #FFFDF5;
+  --green:   #15803D;
+  --green-d: #0D5C2A;
+  --green-l: #DCFCE7;
+  --green-b: #4ADE80;
+  --amber:   #D97706;
+  --red:     #C0160C;
+  --line:    #E5DDD0;
+  --ghost:   #A89878;
+  --gray:    #F5F1EA;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--ink);
+  overflow-x: hidden;
+}
+
+/* ══ HERO ══════════════════════════════════════════════ */
+.hero {
+  background: #06100A;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px 56px;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(74,222,128,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(74,222,128,.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  top: -100px;
+  right: -80px;
+  width: 560px;
+  height: 560px;
+  background: radial-gradient(circle, rgba(21,128,61,.22) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(21,128,61,.2);
+  border: 1px solid rgba(74,222,128,.3);
+  color: var(--green-b);
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 2px;
+  margin-bottom: 28px;
+  animation: fadeDown .6s ease both;
+}
+
+.hero-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: var(--green-b);
+  border-radius: 50%;
+  animation: pulse 1.4s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: .5; transform: scale(.7); }
+}
+
+.hero-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--ghost);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  animation: fadeDown .6s .1s ease both;
+}
+
+.hero-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(52px, 12vw, 96px);
+  line-height: .95;
+  color: var(--paper);
+  margin-bottom: 8px;
+  animation: fadeDown .6s .15s ease both;
+  letter-spacing: .02em;
+}
+
+.hero-title span { color: var(--green-b); display: block; }
+
+.hero-sub {
+  font-size: clamp(16px, 3vw, 20px);
+  color: #8A9A88;
+  max-width: 520px;
+  margin: 16px auto 40px;
+  line-height: 1.5;
+  animation: fadeDown .6s .2s ease both;
+}
+
+.hero-sub strong { color: var(--paper); font-weight: 500; }
+
+.hero-cta {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  animation: fadeDown .6s .3s ease both;
+}
+
+.btn-main {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--green);
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  padding: 18px 40px;
+  border-radius: 4px;
+  text-decoration: none;
+  letter-spacing: .02em;
+  transition: background .2s, transform .15s;
+  box-shadow: 0 4px 24px rgba(21,128,61,.45);
+}
+
+.btn-main:hover {
+  background: var(--green-d);
+  transform: translateY(-2px);
+}
+
+.hero-guarantee {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--ghost);
+  letter-spacing: .06em;
+}
+
+.prereq-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(192,22,12,.1);
+  border: 1px solid rgba(192,22,12,.25);
+  color: #FF8A85;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  padding: 6px 14px;
+  border-radius: 2px;
+  margin-top: 10px;
+  letter-spacing: .06em;
+}
+
+.hero-scroll {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--ghost);
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  animation: fadeDown .6s .5s ease both;
+}
+
+.scroll-line {
+  width: 1px;
+  height: 32px;
+  background: linear-gradient(to bottom, transparent, var(--ghost));
+  animation: scrollAnim 1.6s infinite;
+}
+
+@keyframes scrollAnim {
+  0%   { opacity: 0; transform: scaleY(0); transform-origin: top; }
+  50%  { opacity: 1; transform: scaleY(1); }
+  100% { opacity: 0; transform: scaleY(0); transform-origin: bottom; }
+}
+
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ══ SEÇÕES ═══════════════════════════════════════════ */
+.section      { background: var(--paper); padding: 72px 24px; }
+.section.dark { background: #06100A; color: var(--paper); }
+.section.gray { background: var(--gray); }
+
+.container { max-width: 680px; margin: 0 auto; }
+
+.section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 12px;
+}
+
+.dark .section-label { color: var(--green-b); }
+
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(36px, 7vw, 56px);
+  line-height: 1;
+  margin-bottom: 24px;
+  letter-spacing: .02em;
+}
+
+.dark .section-title { color: var(--paper); }
+
+p.body { font-size: 17px; line-height: 1.7; color: #4A3E2A; margin-bottom: 16px; }
+.dark p.body { color: #6A8A68; }
+
+/* ══ PROGRESSÃO ══════════════════════════════════════ */
+.continua-banner {
+  background: #06100A;
+  border: 1px solid #0F3020;
+  border-radius: 6px;
+  padding: 20px 22px;
+  margin: 24px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.continua-num { font-family: 'Bebas Neue', sans-serif; font-size: 40px; line-height: 1; flex-shrink: 0; }
+.continua-arrow { font-size: 20px; color: #1A3020; flex-shrink: 0; }
+.continua-text strong { color: var(--paper); font-size: 15px; display: block; margin-bottom: 3px; }
+.continua-text span   { color: #3A6050; font-size: 13px; }
+
+/* ══ QUOTE ════════════════════════════════════════════ */
+.quote-block {
+  border-left: 3px solid var(--green);
+  padding: 16px 20px;
+  margin: 28px 0;
+  background: var(--green-l);
+  border-radius: 0 6px 6px 0;
+}
+
+.quote-text { font-size: 17px; font-style: italic; color: var(--ink); line-height: 1.6; }
+
+/* ══ CÓDIGO DEMO ══════════════════════════════════════ */
+.code-demo {
+  background: #0A180A;
+  border: 1px solid #0F3020;
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 24px 0;
+}
+
+.code-header {
+  background: var(--green);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.code-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+.code-filename {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: rgba(255,255,255,.7);
+  margin-left: 4px;
+}
+
+.code-body {
+  padding: 20px 24px;
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  line-height: 2;
+}
+
+/* Tokens de sintaxe */
+.kw  { color: #4ADE80; font-weight: 600; }
+.str { color: #86EFAC; }
+.cm  { color: #2A5A2A; font-style: italic; }
+.cls { color: #F59E0B; }
+.met { color: #60A5FA; }
+.num { color: #F472B6; }
+.op  { color: #94A3B8; }
+.var { color: #E2E8F0; }
+
+.code-output {
+  border-top: 1px solid #0F3020;
+  padding: 14px 20px;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--green-b);
+  line-height: 1.9;
+}
+
+.code-output-label {
+  font-size: 9px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: #1A4020;
+  margin-bottom: 6px;
+}
+
+/* ══ LIÇÕES ═══════════════════════════════════════════ */
+.licoes-grid {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 28px 0;
+}
+
+.licao-item {
+  display: flex;
+  align-items: flex-start;
+  border-bottom: 1px solid var(--line);
+}
+
+.licao-item:last-child { border-bottom: none; }
+
+.licao-num {
+  width: 52px;
+  flex-shrink: 0;
+  background: var(--green);
+  color: #fff;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  padding: 18px 0;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.licao-content { padding: 16px 18px; flex: 1; }
+.licao-nome { font-weight: 700; font-size: 15px; color: var(--ink); margin-bottom: 3px; }
+.licao-desc { font-size: 13.5px; color: var(--ghost); line-height: 1.4; }
+
+.licao-tag {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 2px;
+  background: var(--green-l);
+  border: 1px solid rgba(21,128,61,.2);
+  color: var(--green);
+  margin-top: 6px;
+}
+
+/* ══ PARA QUEM ════════════════════════════════════════ */
+.target-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 28px 0; }
+@media (max-width: 520px) { .target-grid { grid-template-columns: 1fr; } }
+
+.target-card { border-radius: 6px; padding: 20px; border: 1px solid; }
+.target-card.sim { background: var(--green-l); border-color: #86EFAC; }
+.target-card.nao { background: #FEF2F2; border-color: #FECACA; }
+
+.target-card-header {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.target-card.sim .target-card-header { color: var(--green); }
+.target-card.nao .target-card-header { color: var(--red); }
+
+.target-item { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: #3A3020; line-height: 1.45; margin-bottom: 8px; }
+.target-item:last-child { margin-bottom: 0; }
+
+/* ══ DEPOIMENTOS ══════════════════════════════════════ */
+.depo-grid { display: flex; flex-direction: column; gap: 16px; margin: 28px 0; }
+
+.depo-card {
+  background: #0A180A;
+  border: 1px solid #0F3020;
+  border-radius: 6px;
+  padding: 20px 22px;
+}
+
+.depo-text { font-size: 15px; color: #8AB890; line-height: 1.6; margin-bottom: 14px; font-style: italic; }
+.depo-text::before { content: '"'; color: var(--green-b); font-size: 20px; }
+.depo-text::after  { content: '"'; color: var(--green-b); font-size: 20px; }
+
+.depo-author { display: flex; align-items: center; gap: 10px; }
+
+.depo-avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: #060F06;
+  border: 2px solid #0F3020;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 14px;
+  color: var(--green-b);
+}
+
+.depo-name   { font-size: 13px; font-weight: 600; color: var(--paper); }
+.depo-handle { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--ghost); }
+
+/* ══ PREÇO ════════════════════════════════════════════ */
+.price-box {
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 32px 0;
+  box-shadow: 6px 6px 0 var(--green);
+}
+
+.price-header {
+  background: var(--green);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.price-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: #fff; letter-spacing: .04em; }
+
+.price-badge {
+  background: var(--green-b);
+  color: var(--ink);
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  padding: 4px 12px;
+  border-radius: 2px;
+  letter-spacing: .08em;
+  font-weight: 700;
+}
+
+.price-body { padding: 28px 24px; }
+
+.price-number { display: flex; align-items: flex-start; gap: 4px; margin-bottom: 6px; }
+.price-currency { font-family: 'DM Mono', monospace; font-size: 20px; color: var(--ghost); margin-top: 8px; }
+.price-value { font-family: 'Bebas Neue', sans-serif; font-size: 72px; line-height: 1; color: var(--ink); }
+.price-cents { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--ink); margin-top: 10px; }
+.price-note  { font-size: 13px; color: var(--ghost); margin-bottom: 24px; }
+
+.price-includes { list-style: none; margin-bottom: 28px; display: flex; flex-direction: column; gap: 8px; }
+.price-includes li { display: flex; align-items: center; gap: 10px; font-size: 14.5px; color: #3A3020; }
+.price-includes li::before { content: '✓'; color: var(--green); font-weight: 700; font-size: 15px; flex-shrink: 0; }
+
+.btn-comprar {
+  display: block;
+  width: 100%;
+  background: var(--green);
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  padding: 18px;
+  border-radius: 4px;
+  text-decoration: none;
+  text-align: center;
+  transition: background .2s, transform .15s;
+  box-shadow: 0 4px 20px rgba(21,128,61,.35);
+}
+
+.btn-comprar:hover { background: var(--green-d); transform: translateY(-2px); }
+
+.price-security {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+
+.security-item { font-family: 'DM Mono', monospace; font-size: 10.5px; color: var(--ghost); display: flex; align-items: center; gap: 6px; }
+
+/* ══ PAIN LIST ════════════════════════════════════════ */
+.pain-list { list-style: none; margin: 28px 0; display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.pain-item { display: flex; align-items: flex-start; gap: 16px; padding: 16px 20px; border-bottom: 1px solid var(--line); font-size: 15.5px; color: #4A3E2A; line-height: 1.5; }
+.pain-item:last-child { border-bottom: none; }
+.pain-item.ok { background: var(--green-l); }
+.pain-item.strike { text-decoration: line-through; color: var(--ghost); background: #FAFAF7; }
+.pain-icon { font-size: 18px; flex-shrink: 0; }
+
+/* ══ DIVIDER ══════════════════════════════════════════ */
+.divider { display: flex; align-items: center; gap: 16px; margin: 40px 0; }
+.divider-line { flex: 1; height: 1px; background: var(--line); }
+.divider-text { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--ghost); letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; }
+
+/* ══ FAQ ══════════════════════════════════════════════ */
+.faq-list { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; margin: 28px 0; }
+.faq-item { border-bottom: 1px solid var(--line); }
+.faq-item:last-child { border-bottom: none; }
+.faq-q { padding: 18px 20px; font-weight: 600; font-size: 15px; color: var(--ink); cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 12px; user-select: none; }
+.faq-q:hover { background: var(--gray); }
+.faq-icon { font-size: 18px; color: var(--ghost); transition: transform .2s; }
+.faq-item.open .faq-icon { transform: rotate(45deg); }
+.faq-a { display: none; padding: 0 20px 18px; font-size: 14.5px; color: #4A3E2A; line-height: 1.7; border-top: 1px solid var(--line); }
+.faq-item.open .faq-a { display: block; }
+
+/* ══ FINAL CTA ════════════════════════════════════════ */
+.final-cta {
+  background: #06100A;
+  padding: 80px 24px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.final-cta::before {
+  content: '2';
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 400px;
+  color: rgba(74,222,128,.02);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  line-height: 1;
+}
+
+.final-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(40px, 8vw, 68px); color: var(--paper); line-height: 1; margin-bottom: 16px; position: relative; }
+.final-title span { color: var(--green-b); }
+.final-sub { font-size: 17px; color: #3A6040; margin-bottom: 36px; max-width: 440px; margin-left: auto; margin-right: auto; position: relative; }
+.final-price { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--ghost); margin-top: 14px; position: relative; }
+
+/* ══ FOOTER ═══════════════════════════════════════════ */
+footer { background: #030806; padding: 32px 24px; text-align: center; }
+.footer-text { font-family: 'DM Mono', monospace; font-size: 11px; color: #0F2015; letter-spacing: .06em; line-height: 1.8; }
+
+/* ══ STICKY ═══════════════════════════════════════════ */
+.sticky-bar { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #06100A; border-top: 1px solid #0F3020; padding: 12px 20px; z-index: 999; align-items: center; justify-content: space-between; gap: 12px; }
+@media (max-width: 640px) { .sticky-bar { display: flex; } }
+.sticky-price { font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--paper); line-height: 1; }
+.sticky-price small { display: block; font-family: 'DM Mono', monospace; font-size: 9px; color: var(--ghost); letter-spacing: .06em; }
+.btn-sticky { background: var(--green); color: #fff; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700; padding: 12px 24px; border-radius: 4px; text-decoration: none; white-space: nowrap; }
+</style>
+</head>
+<body>
+
+<!-- ══ HERO ══════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-badge">Caderno de Campo — Série C# × RE4</div>
+  <p class="hero-eyebrow">Caderno 2 — Lógica Condicional</p>
+  <h1 class="hero-title">
+    O programa
+    <span>decide.</span>
+  </h1>
+  <p class="hero-sub">
+    O <strong>Caderno 2</strong> é onde seu programa para de fazer sempre a mesma coisa.
+    Ele aprende a avaliar condições e escolher caminhos —
+    if, else, else if e operadores lógicos, tudo no papel.
+  </p>
+  <div class="hero-cta">
+    <a href="https://pay.kiwify.com.br/hnv4xYY" class="btn-main">Quero o Caderno 2 ↓</a>
+    <p class="hero-guarantee">🔒 Acesso imediato após o pagamento · R$17</p>
+    <span class="prereq-badge">⚠ Pré-requisito: Cadernos 0 e 1 concluídos</span>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    scroll
+  </div>
+</section>
+
+<!-- ══ PROGRESSÃO ═════════════════════════════════════════ -->
+<section class="section">
+  <div class="container">
+    <p class="section-label">Onde você está na série</p>
+    <h2 class="section-title">Sequência. Agora, decisão.</h2>
+
+    <div class="continua-banner">
+      <div class="continua-num" style="color:#C0160C;">0</div>
+      <div class="continua-arrow">→</div>
+      <div class="continua-num" style="color:#1A3A6B;">1</div>
+      <div class="continua-arrow">→</div>
+      <div class="continua-num" style="color:#15803D;">2</div>
+      <div class="continua-text">
+        <strong>Lógica → Programa → Decisão</strong>
+        <span>Você aprendeu a pensar (C0) e a ler código sequencial (C1). Agora o programa aprende a escolher caminhos diferentes dependendo dos dados.</span>
+      </div>
+    </div>
+
+    <div class="quote-block">
+      <p class="quote-text">Leon não entra numa sala sem avaliar. Ele verifica se há inimigos, se a munição está boa, se o caminho está bloqueado. Seu programa precisa fazer o mesmo.</p>
+    </div>
+
+    <p class="body">Até o Caderno 1, todo programa executava linha por linha, sempre da mesma forma. A partir do Caderno 2, <strong>a mesma sequência de código pode produzir resultados diferentes</strong> dependendo dos valores das variáveis.</p>
+  </div>
+</section>
+
+<!-- ══ DEMO DE CÓDIGO ══════════════════════════════════════ -->
+<section class="section gray">
+  <div class="container">
+    <p class="section-label">O que você vai aprender a ler</p>
+    <h2 class="section-title">Código que escolhe</h2>
+
+    <p class="body">Você lê o if no papel, rastreia a condição e descobre qual bloco executa — antes de abrir qualquer compilador.</p>
+
+    <div class="code-demo">
+      <div class="code-header">
+        <div class="code-dot" style="background:#FF5F57;"></div>
+        <div class="code-dot" style="background:#FFBD2E;"></div>
+        <div class="code-dot" style="background:#28CA41;"></div>
+        <span class="code-filename">StatusLeon.cs — Lição 4, exercício rastreado no papel</span>
+      </div>
+      <div class="code-body">
+        <div><span class="kw">int</span> <span class="var">vida</span> = <span class="num">45</span>;</div>
+        <div>&nbsp;</div>
+        <div><span class="kw">if</span> (<span class="var">vida</span> <span class="op">&gt;</span> <span class="num">80</span>)</div>
+        <div>{</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cls">Console</span>.<span class="met">WriteLine</span>(<span class="str">"Status: ÓTIMO"</span>);</div>
+        <div>}</div>
+        <div><span class="kw">else if</span> (<span class="var">vida</span> <span class="op">&gt;</span> <span class="num">50</span>)</div>
+        <div>{</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cls">Console</span>.<span class="met">WriteLine</span>(<span class="str">"Status: BOM"</span>);</div>
+        <div>}</div>
+        <div><span class="kw">else if</span> (<span class="var">vida</span> <span class="op">&gt;</span> <span class="num">20</span>)</div>
+        <div>{</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cls">Console</span>.<span class="met">WriteLine</span>(<span class="str">"Status: PERIGO"</span>);</div>
+        <div>}</div>
+        <div><span class="kw">else</span></div>
+        <div>{</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cls">Console</span>.<span class="met">WriteLine</span>(<span class="str">"Status: CRÍTICO"</span>);</div>
+        <div>}</div>
+      </div>
+      <div class="code-output">
+        <div class="code-output-label">Saída — você aprende a prever isso no papel</div>
+        <div>Status: PERIGO</div>
+        <div style="color:#1A4020;font-size:11px;margin-top:6px;">
+          ← vida=45: 45&gt;80 false → 45&gt;50 false → 45&gt;20 true → terceiro bloco executa
+        </div>
+      </div>
+    </div>
+
+    <p class="body" style="font-size:14px;color:var(--ghost);text-align:center;">
+      ↑ Você rastreia esse código linha por linha no papel antes de digitar qualquer coisa.
+    </p>
+  </div>
+</section>
+
+<!-- ══ CONTEÚDO ════════════════════════════════════════════ -->
+<section class="section">
+  <div class="container">
+    <p class="section-label">O que tem dentro</p>
+    <h2 class="section-title">5 lições. Decisões dominadas.</h2>
+
+    <div class="licoes-grid">
+
+      <div class="licao-item">
+        <div class="licao-num">L1</div>
+        <div class="licao-content">
+          <div class="licao-nome">O que é uma condição?</div>
+          <div class="licao-desc">Os 6 operadores de comparação. A diferença crítica entre = (atribuição) e == (comparação). Exercícios de avaliação manual com valores reais.</div>
+          <span class="licao-tag">operadores · true/false</span>
+        </div>
+      </div>
+
+      <div class="licao-item">
+        <div class="licao-num">L2</div>
+        <div class="licao-content">
+          <div class="licao-nome">Se isso, então aquilo — if</div>
+          <div class="licao-desc">A estrutura if no papel. Fluxograma desenhado com os dois caminhos. Como rastrear linha por linha e prever a saída antes de compilar.</div>
+          <span class="licao-tag">if · fluxograma · rastreamento</span>
+        </div>
+      </div>
+
+      <div class="licao-item">
+        <div class="licao-num">L3</div>
+        <div class="licao-content">
+          <div class="licao-nome">Senão — else</div>
+          <div class="licao-desc">O caminho alternativo. Tabela de rastreamento com dois cenários. Um dos dois blocos sempre executa — nunca os dois ao mesmo tempo.</div>
+          <span class="licao-tag">if · else · dois caminhos</span>
+        </div>
+      </div>
+
+      <div class="licao-item">
+        <div class="licao-num">L4</div>
+        <div class="licao-content">
+          <div class="licao-nome">Vários caminhos — else if</div>
+          <div class="licao-desc">Encadeamento de condições. Regra de ouro: só o primeiro true executa. Exercício: sistema de classificação de munição com 4 níveis.</div>
+          <span class="licao-tag">else if · encadeamento</span>
+        </div>
+      </div>
+
+      <div class="licao-item">
+        <div class="licao-num">L5</div>
+        <div class="licao-content">
+          <div class="licao-nome">Combinando condições — E, OU, NÃO</div>
+          <div class="licao-desc">Operadores &&, || e !. Tabelas verdade completas. Missão final: sistema de status de combate combinando tudo do caderno.</div>
+          <span class="licao-tag">&amp;&amp; · || · ! · missão final</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ PARA QUEM ═══════════════════════════════════════════ -->
+<section class="section gray">
+  <div class="container">
+    <p class="section-label">Para quem é</p>
+    <h2 class="section-title">Seja honesto com você mesmo</h2>
+
+    <div class="target-grid">
+      <div class="target-card sim">
+        <div class="target-card-header">✓ É para você se...</div>
+        <div class="target-item"><span>→</span> Concluiu os Cadernos 0 e 1</div>
+        <div class="target-item"><span>→</span> Entende variáveis e sequência</div>
+        <div class="target-item"><span>→</span> Quer que seu programa tome decisões</div>
+        <div class="target-item"><span>→</span> Prefere entender antes de digitar</div>
+      </div>
+      <div class="target-card nao">
+        <div class="target-card-header">✗ Não é para você se...</div>
+        <div class="target-item"><span>→</span> Não fez o Caderno 1 — volte primeiro</div>
+        <div class="target-item"><span>→</span> Não sabe o que é uma variável ainda</div>
+        <div class="target-item"><span>→</span> Já programa e quer tópicos avançados</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ DEPOIMENTOS ════════════════════════════════════════ -->
+<section class="section dark">
+  <div class="container">
+    <p class="section-label">Quem já usou</p>
+    <h2 class="section-title">Resultados reais</h2>
+
+    <div class="depo-grid">
+      <div class="depo-card">
+        <p class="depo-text">O fluxograma da Lição 2 foi o que faltava. Ver o if desenhado visualmente, com os dois caminhos — o sim e o não — me fez entender de verdade o que acontece quando o código roda.</p>
+        <div class="depo-author">
+          <div class="depo-avatar">M</div>
+          <div>
+            <div class="depo-name">Marcos P.</div>
+            <div class="depo-handle">estudante · São Paulo</div>
+          </div>
+        </div>
+      </div>
+      <div class="depo-card">
+        <p class="depo-text">A missão final da Lição 5 me fez usar tudo de uma vez — if, else if, && e ||. Quando terminei, percebi que estava pensando como programador, não só copiando código.</p>
+        <div class="depo-author">
+          <div class="depo-avatar">J</div>
+          <div>
+            <div class="depo-name">Juliana R.</div>
+            <div class="depo-handle">iniciante em C# · Recife</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PREÇO ═══════════════════════════════════════════════ -->
+<section class="section" id="preco">
+  <div class="container">
+    <p class="section-label">Investimento</p>
+    <h2 class="section-title">O terceiro passo.</h2>
+
+    <div class="price-box">
+      <div class="price-header">
+        <span class="price-title">Caderno 2 — Decisões e Caminhos</span>
+        <span class="price-badge">Acesso imediato</span>
+      </div>
+      <div class="price-body">
+        <div class="price-number">
+          <span class="price-currency">R$</span>
+          <span class="price-value">17</span>
+          <span class="price-cents">,00</span>
+        </div>
+        <p class="price-note">pagamento único · acesso permanente · sem mensalidade</p>
+
+        <ul class="price-includes">
+          <li>Caderno 2 completo em PDF — imprimível em qualquer impressora</li>
+          <li>5 lições: condições, if, else, else if e operadores lógicos</li>
+          <li>Fluxogramas para rastrear e preencher à mão</li>
+          <li>Tabelas verdade completas para &&, || e !</li>
+          <li>Missão final: sistema de status de combate completo</li>
+          <li>Gabaritos detalhados para todos os exercícios</li>
+        </ul>
+
+        <a href="https://pay.kiwify.com.br/hnv4xYY" class="btn-comprar">Quero o Caderno 2 por R$17 →</a>
+
+        <div class="price-security">
+          <span class="security-item">🔒 Pagamento seguro Kiwify</span>
+          <span class="security-item">📥 Download imediato</span>
+          <span class="security-item">7 dias de garantia</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider">
+      <div class="divider-line"></div>
+      <div class="divider-text">depois do caderno 2</div>
+      <div class="divider-line"></div>
+    </div>
+
+    <ul class="pain-list">
+      <li class="pain-item strike">
+        <span class="pain-icon">✗</span> "Não entendo para que serve o if na prática"
+      </li>
+      <li class="pain-item strike">
+        <span class="pain-icon">✗</span> "Confundo = com == toda hora"
+      </li>
+      <li class="pain-item strike">
+        <span class="pain-icon">✗</span> "Não sei quando usar else if ou só else"
+      </li>
+      <li class="pain-item ok">
+        <span class="pain-icon">✓</span>
+        Você lê condicionais em C#, entende o fluxo de decisão e está pronto para o Caderno 3 — loops e repetição.
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══ FAQ ════════════════════════════════════════════════ -->
+<section class="section gray">
+  <div class="container">
+    <p class="section-label">Dúvidas</p>
+    <h2 class="section-title">Perguntas frequentes</h2>
+
+    <div class="faq-list">
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Precisa ter feito os Cadernos 0 e 1?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a">
+          Sim. O Caderno 2 usa variáveis e execução sequencial diretamente. Sem esses conceitos você vai travar logo nas primeiras lições. Comece pelo 0 se ainda não fez.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Vou precisar de computador?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a">
+          Não. Todo o Caderno 2 é feito no papel — você lê o código impresso, rastreia condições e preenche as tabelas com caneta. O computador entra somente nos cadernos posteriores.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Quanto tempo leva?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a">
+          Em média 3 a 5 horas no total, divididas em 5 lições de 40 a 60 minutos cada. A Lição 5 (missão final) é a mais densa.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          O que vem depois?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a">
+          O Caderno 3 — Repetição e Padrões. Você aprende while, for, break e continue. As condições do Caderno 2 são usadas diretamente para controlar os loops.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          E se eu não gostar?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a">
+          7 dias de garantia pelo Kiwify. Solicita o reembolso diretamente na plataforma, sem burocracia.
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ FINAL CTA ═══════════════════════════════════════════ -->
+<section class="final-cta">
+  <h2 class="final-title">
+    O programa
+    <span>agora escolhe.</span>
+  </h2>
+  <p class="final-sub">
+    Sequência você já domina. Agora é hora de ensinar o programa a decidir.
+  </p>
+  <a href="https://pay.kiwify.com.br/hnv4xYY" class="btn-main" style="font-size:20px;padding:20px 48px;position:relative;">
+    Quero o Caderno 2 →
+  </a>
+  <p class="final-price">R$17 · pagamento único · acesso imediato</p>
+</section>
+
+<footer>
+  <p class="footer-text">
+    C# do Zero × Resident Evil 4 — Cadernos de Campo<br>
+    Produto digital · Entregue via Kiwify · Suporte pelo Instagram
+  </p>
+</footer>
+
+<div class="sticky-bar">
+  <div class="sticky-price">
+    R$17
+    <small>Caderno 2 — acesso imediato</small>
+  </div>
+  <a href="https://pay.kiwify.com.br/hnv4xYY" class="btn-sticky">Comprar →</a>
+</div>
+
+<script>
+function toggleFaq(el) {
+  el.parentElement.classList.toggle('open');
+}
+</script>
+
+</body>
+</html>
